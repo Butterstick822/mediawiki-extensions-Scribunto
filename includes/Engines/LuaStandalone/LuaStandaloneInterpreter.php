@@ -135,13 +135,8 @@ class LuaStandaloneInterpreter extends LuaInterpreter {
 				$cmd );
 		}
 
-		if ( php_uname( 's' ) == 'Windows NT' ) {
-			// Like the passthru() in older versions of PHP,
-			// PHP's invokation of cmd.exe in proc_open() is broken:
-			// http://news.php.net/php.internals/21796
-			// Unlike passthru(), it is not fixed in any PHP version,
-			// so we use the fix similar to one in wfShellExec()
-			$cmd = '"' . $cmd . '"';
+		if (php_uname('s') == 'Windows NT') {
+			$cmd = escapeshellcmd($cmd);
 		}
 
 		$this->logger->debug( __METHOD__ . ": creating interpreter: $cmd" );
