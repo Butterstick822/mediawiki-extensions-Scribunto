@@ -16,6 +16,8 @@ use PHPUnit\Framework\TestSuite;
  * - $moduleName: Name of the module being tested
  * - getTestModules(): Add a mapping from $moduleName to the file containing
  *   the code.
+ *
+ * Also, your test must be in the Database group.
  */
 abstract class LuaEngineTestBase extends MediaWikiLangTestCase {
 	use LuaEngineTestHelper;
@@ -96,7 +98,11 @@ abstract class LuaEngineTestBase extends MediaWikiLangTestCase {
 	 * @return Title
 	 */
 	protected function getTestTitle() {
-		return Title::newMainPage();
+		// XXX This should use a dedicated test page, not the main page
+		$t = Title::newMainPage();
+		// Force content model to avoid DB queries
+		$t->setContentModel( CONTENT_MODEL_WIKITEXT );
+		return $t;
 	}
 
 	public function toString(): string {
